@@ -1,15 +1,20 @@
-EXEC = projet  
-OBJ = main.o dfa.o nfa.o ast.o graphviz.o
+EXEC = projet
+
+SRC = main.c parser_regex.c ast.c nfa.c dfa.c minimize.c graphviz.c generator.c utils.c
+OBJ = $(SRC:.c=.o)
+
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c11 -g
 
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	gcc -o $(EXEC) $(OBJ)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ)
 
-.PHONY : all clean
-
-main.o: main.c
-	gcc -c main.c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f *.o projet
+	rm -rf *.o $(EXEC) *.dSYM *.dot *.png generated_lexer.c lexer_generated
+
+.PHONY: all clean
