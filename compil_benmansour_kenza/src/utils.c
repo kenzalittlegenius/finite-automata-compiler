@@ -5,13 +5,14 @@
 
 char *read_first_line(const char *filename) {
     FILE *file = fopen(filename, "r");
+    char *line = malloc(1024 * sizeof(char));
 
     if (file == NULL) {
         perror("Erreur ouverture fichier");
         return NULL;
     }
 
-    char *line = malloc(1024 * sizeof(char));
+    
 
     if (line == NULL) {
         fclose(file);
