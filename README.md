@@ -8,3 +8,7 @@ les fichiers .c
 
 DFA = deterministic finite automaton
 NFA = Non-deterministic Finite Automaton
+
+compiler : make 
+nettoyer : make clean 
+exécuter : ./projet

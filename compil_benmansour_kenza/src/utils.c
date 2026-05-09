@@ -12,8 +12,6 @@ char *read_first_line(const char *filename) {
         return NULL;
     }
 
-    
-
     if (line == NULL) {
         fclose(file);
         return NULL;
