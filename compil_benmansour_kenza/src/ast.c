@@ -14,7 +14,9 @@ ASTNode *ast_create_symbol(char symbol) {
 
     return node;
 }
-//noeud unaire = opération agissant un élément 
+
+
+//noeud unaire = opération sur un élément 
 ASTNode *ast_create_unary(ASTType type, ASTNode *child) {
     ASTNode *node = malloc(sizeof(ASTNode));
     if (node == NULL) return NULL;
@@ -26,6 +28,8 @@ ASTNode *ast_create_unary(ASTType type, ASTNode *child) {
 
     return node;
 }
+
+
 //noeud binaire = opération entre deux éléments (concaténation et union)
 ASTNode *ast_create_binary(ASTType type, ASTNode *left, ASTNode *right) {
     ASTNode *node = malloc(sizeof(ASTNode));
@@ -38,11 +42,14 @@ ASTNode *ast_create_binary(ASTType type, ASTNode *left, ASTNode *right) {
 
     return node;
 }
+
+
 //fonction de l'affichage de l'ast 
 void ast_print(ASTNode *node) {
     if (node == NULL) return;
 
     switch (node->Type) {
+        
         case AST_SYMBOL:
             printf("%c", node->symbol);
             break;
@@ -70,6 +77,8 @@ void ast_print(ASTNode *node) {
             break;
     }
 }
+
+
 //fonction pour libérer le sous-arbre droit ou le sous-arbre gauche
 void ast_free(ASTNode *node) {
     if (node == NULL) return;

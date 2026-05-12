@@ -1,20 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "utils.h"
 #include "ast.h"
+#include "parser_regex.h"
+
+#include "nfa.h"
+
+
 
 int main(int argc, char **argv) {
+
     char *regex;
+    ASTNode *tree;
 
     if (argc != 2) {
-        printf("Add the regex file to %s\n", argv[0]);
+        printf("Usage: %s <regex_file>\n", argv[0]);
         return 1;
     }
 
     regex = read_first_line(argv[1]);
 
     if (regex == NULL) {
-        printf("Error: can't read the regex\n");
+        printf("Error: can't read regex file\n");
         return 1;
     }
 
@@ -22,18 +30,31 @@ int main(int argc, char **argv) {
 
     printf("Regex: %s\n", regex);
 
-    ASTNode *a = ast_create_symbol('a');
-    ASTNode *b = ast_create_symbol('b');
+    tree = parse_regex(regex);
 
-    ASTNode *union_node = ast_create_binary(AST_UNION, a, b);
-    ASTNode *star_node = ast_create_unary(AST_STAR, union_node);
+    if (tree == NULL) {
+        printf("Parsing failed\n");
+        free(regex);
+        return 1;
+    }
 
     printf("AST: ");
-    ast_print(star_node);
+    ast_print(tree);
     printf("\n");
 
-    ast_free(star_node);
+    ast_free(tree);
     free(regex);
-
+    
+    NFA nfa;
+    
+    nfa_init(&nfa);
+    
+    NFAFragment frag = nfa_build_from_ast(&nfa, tree);
+    
+    nfa.start_state = frag.start;
+    nfa.accept_state = frag.end;
+    
+    nfa_print(&nfa);
+    
     return 0;
 }
