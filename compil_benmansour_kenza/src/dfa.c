@@ -18,7 +18,7 @@ void dfa_init(DFA *dfa) {
     for (i = 0; i < MAX_DFA_STATES; i++) {
         dfa->states[i].is_accepting = 0;
 
-        for (j = 0; j < 1024; j++) {
+        for (j = 0; j < MAX_NFA_STATES; j++) {
             dfa->states[i].states[j] = 0;
         }
 
@@ -77,7 +77,7 @@ static void epsilon_closure(
     int changed;
     int i;
 
-    for (i = 0; i < 1024; i++) {
+    for (i = 0; i < MAX_NFA_STATES; i++) {
         output_set[i] = input_set[i];
     }
 
@@ -113,7 +113,7 @@ static void move_set(
 ) {
     int i;
 
-    for (i = 0; i < 1024; i++) {
+    for (i = 0; i < MAX_NFA_STATES; i++) {
         output_set[i] = 0;
     }
 
@@ -133,7 +133,7 @@ Renvoie 1 s'ils sont identiques, 0 sinon.
 static int same_set(int a[], int b[]) {
     int i;
 
-    for (i = 0; i < 1024; i++) {
+    for (i = 0; i < MAX_NFA_STATES; i++) {
         if (a[i] != b[i]) {
             return 0;
         }
@@ -167,7 +167,7 @@ static int add_dfa_state(DFA *dfa, const NFA *nfa, int set[]) {
     int i;
     int id = dfa->state_count;
 
-    for (i = 0; i < 1024; i++) {
+    for (i = 0; i < MAX_NFA_STATES; i++) {
         dfa->states[id].states[i] = set[i];
     }
 
@@ -190,8 +190,8 @@ static int add_dfa_state(DFA *dfa, const NFA *nfa, int set[]) {
 Construit le DFA à partir du NFA
 */
 void dfa_from_nfa(DFA *dfa, const NFA *nfa) {
-    int initial_set[1024] = {0};
-    int initial_closure[1024] = {0};
+    int initial_set[MAX_NFA_STATES] = {0};
+    int initial_closure[MAX_NFA_STATES] = {0};
 
     int current_index;
     int symbol_index;
@@ -215,8 +215,8 @@ void dfa_from_nfa(DFA *dfa, const NFA *nfa) {
         for (symbol_index = 0; symbol_index < dfa->alphabet_size; symbol_index++) {
             char symbol = dfa->alphabet[symbol_index];
 
-            int moved[1024] = {0};
-            int closure[1024] = {0};
+            int moved[MAX_NFA_STATES] = {0};
+            int closure[MAX_NFA_STATES] = {0};
 
             int existing_state;
 

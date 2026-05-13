@@ -7,19 +7,21 @@
 Nombre maximal d'états dans le DFA.
 Chaque état du DFA correspond à un ensemble d'états du NFA.
 */
-#define MAX_DFA_STATES 1024
+#define MAX_DFA_STATES 128
 
 /*
 Taille maximale de l'alphabet.
-Pour l'instant, on reste simple.
 */
 #define MAX_ALPHABET 128
 
 /*
-Un état du DFA est représenté par un ensemble d'états du NFA.
+Nombre max d'états dans le NFA.
+*/
 
-Exemple :
-l'état DFA 0 peut correspondre à l'ensemble {0, 1, 4}
+#define MAX_NFA_STATES 128
+
+/*
+Un état du DFA est représenté par un ensemble d'états du NFA.
 */
 typedef struct {
 
@@ -27,7 +29,7 @@ typedef struct {
     states[i] vaut 1 si l'état i du NFA appartient à cet ensemble.
     Sinon, states[i] vaut 0.
     */
-    int states[1024];
+    int states[MAX_NFA_STATES];
 
     /*
     Indique si cet état DFA est acceptant.

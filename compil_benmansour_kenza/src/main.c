@@ -5,15 +5,20 @@
 #include "ast.h"
 #include "parser_regex.h"
 #include "nfa.h"
+#include "dfa.h"
+#include "minimize.h"
+#include "graphviz.h"
 
 int main(int argc, char **argv) {
 
     char *regex;
-
     ASTNode *tree;
 
     NFA nfa;
     NFAFragment frag;
+
+    DFA dfa;
+    DFA minimized;
 
     if (argc != 2) {
         printf("Usage: %s <regex_file>\n", argv[0]);
@@ -31,44 +36,38 @@ int main(int argc, char **argv) {
 
     printf("Regex: %s\n", regex);
 
-    /*
-    Construction de l'AST
-    */
     tree = parse_regex(regex);
 
     if (tree == NULL) {
         printf("Parsing failed\n");
-
         free(regex);
-
         return 1;
     }
 
-    printf("AST: ");
-
+    printf("\nAST:\n");
     ast_print(tree);
-
     printf("\n");
 
-    /*
-    Construction du NFA
-    */
     nfa_init(&nfa);
-
     frag = nfa_build_from_ast(&nfa, tree);
 
     nfa.start_state = frag.start;
     nfa.accept_state = frag.end;
 
-    printf("\n");
-
+    printf("\nNFA:\n");
     nfa_print(&nfa);
+    export_nfa_to_dot(&nfa, "nfa.dot");
 
-    /*
-    Libération mémoire
-    */
+    dfa_from_nfa(&dfa, &nfa);
+    printf("\nDFA:\n");
+    dfa_print(&dfa);
+
+    minimize_dfa(&dfa, &minimized);
+
+    printf("\nDFA minimal D':\n");
+    dfa_print(&minimized);
+
     ast_free(tree);
-
     free(regex);
 
     return 0;
