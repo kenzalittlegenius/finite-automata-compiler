@@ -3,6 +3,7 @@
 
 #include "graphviz.h"
 #include "nfa.h"
+#include "ast.h"
 
 /*
 Exporte le NFA
@@ -125,3 +126,84 @@ void export_dfa_to_dot(
 
     fclose(file);
 }
+
+
+
+/*
+Fonction récursive interne :
+écrit un noeud de l'AST et ses arêtes.
+*/
+static int export_ast_node(
+    FILE *file,
+    ASTNode *node,
+    int *next_id
+) {
+    int current_id;
+    int left_id;
+    int right_id;
+
+    if (node == NULL) {
+        return -1;
+    }
+
+    current_id = *next_id;
+    (*next_id)++;
+
+    if (node->Type == AST_SYMBOL) {
+        fprintf(file, "    node%d [label=\"%c\"];\n", current_id, node->symbol);
+    } else if (node->Type == AST_UNION) {
+        fprintf(file, "    node%d [label=\"|\"];\n", current_id);
+    } else if (node->Type == AST_CONCAT) {
+        fprintf(file, "    node%d [label=\".\"];\n", current_id);
+    } else if (node->Type == AST_STAR) {
+        fprintf(file, "    node%d [label=\"*\"];\n", current_id);
+    }
+
+    left_id = export_ast_node(file, node->left, next_id);
+
+    if (left_id != -1) {
+        fprintf(file, "    node%d -> node%d;\n", current_id, left_id);
+    }
+
+    right_id = export_ast_node(file, node->right, next_id);
+
+    if (right_id != -1) {
+        fprintf(file, "    node%d -> node%d;\n", current_id, right_id);
+    }
+
+    return current_id;
+}
+
+
+
+
+
+/*
+Exporte l'AST dans un fichier Graphviz .dot
+*/
+void export_ast_to_dot(
+    ASTNode *tree,
+    const char *filename
+) {
+    FILE *file;
+    int next_id;
+
+    file = fopen(filename, "w");
+
+    if (file == NULL) {
+        printf("Error: cannot create dot file\n");
+        return;
+    }
+
+    next_id = 0;
+
+    fprintf(file, "digraph AST {\n");
+    fprintf(file, "    node [shape = circle];\n");
+
+    export_ast_node(file, tree, &next_id);
+
+    fprintf(file, "}\n");
+
+    fclose(file);
+}
+

@@ -3,7 +3,7 @@
 #define AST_H
 
 
-//définission des noeuds de l'arbre syntaxique
+//définition des noeuds de l'arbre syntaxique
 
 //les types de noeuds possibles : symbole, union concaténation et étoile de Keene
 typedef enum {

@@ -15,6 +15,7 @@ run:
 	./$(EXEC) test.txt
 
 graphs:
+	dot -Tpng ast.dot -o ast.png
 	dot -Tpng nfa.dot -o nfa.png
 	dot -Tpng dfa.dot -o dfa.png
 	dot -Tpng min_dfa.dot -o min_dfa.png

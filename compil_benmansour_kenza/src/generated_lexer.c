@@ -18,18 +18,39 @@ int main(int argc, char **argv) {
 
         switch (state) {
             case 0:
-                if (c == 'a') { state = 1; break; }
-                if (c == 'b') { state = 0; break; }
+                if (c == 'a') { state = 0; break; }
+                if (c == 'b') { state = 1; break; }
+                if (c == 'c') { state = 2; break; }
                 state = -1;
                 break;
             case 1:
-                if (c == 'a') { state = 1; break; }
+                if (c == 'a') { state = 3; break; }
                 if (c == 'b') { state = 2; break; }
+                if (c == 'c') { state = 0; break; }
                 state = -1;
                 break;
             case 2:
-                if (c == 'a') { state = 1; break; }
-                if (c == 'b') { state = 0; break; }
+                if (c == 'a') { state = 2; break; }
+                if (c == 'b') { state = 2; break; }
+                if (c == 'c') { state = 2; break; }
+                state = -1;
+                break;
+            case 3:
+                if (c == 'a') { state = 2; break; }
+                if (c == 'b') { state = 4; break; }
+                if (c == 'c') { state = 4; break; }
+                state = -1;
+                break;
+            case 4:
+                if (c == 'a') { state = 5; break; }
+                if (c == 'b') { state = 2; break; }
+                if (c == 'c') { state = 2; break; }
+                state = -1;
+                break;
+            case 5:
+                if (c == 'a') { state = 2; break; }
+                if (c == 'b') { state = 2; break; }
+                if (c == 'c') { state = 2; break; }
                 state = -1;
                 break;
             default:
@@ -42,7 +63,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (state == 2 || 0) {
+    if (state == 5 || 0) {
         printf("%s appartient au langage rationnel defini par e.\n", word);
     } else {
         printf("%s n'appartient pas au langage rationnel defini par e.\n", word);

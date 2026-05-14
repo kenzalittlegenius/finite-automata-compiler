@@ -1,6 +1,12 @@
 # finite-automata-compiler
 C implementation of a simplified lexical analyzer generator: regular expressions .-> AST -> NFA -> DFA -> minimal DFA
 
+
+make clean
+make
+make run
+make graphs
+
 compiler : make 
 nettoyer les fichiers objets : make clean 
 exécuter : ./projet

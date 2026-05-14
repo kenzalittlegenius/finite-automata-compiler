@@ -243,7 +243,7 @@ void dfa_from_nfa(DFA *dfa, const NFA *nfa) {
 }
 
 /*
-Affiche le DFA.
+Affiche le DFA
 */
 void dfa_print(const DFA *dfa) {
     int i;

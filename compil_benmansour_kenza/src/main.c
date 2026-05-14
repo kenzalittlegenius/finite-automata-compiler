@@ -11,7 +11,6 @@
 #include "generator.h"
 
 int main(int argc, char **argv) {
-
     char *regex;
     ASTNode *tree;
 
@@ -49,6 +48,8 @@ int main(int argc, char **argv) {
     ast_print(tree);
     printf("\n");
 
+    export_ast_to_dot(tree, "ast.dot");
+
     nfa_init(&nfa);
     frag = nfa_build_from_ast(&nfa, tree);
 
@@ -60,15 +61,15 @@ int main(int argc, char **argv) {
     export_nfa_to_dot(&nfa, "nfa.dot");
 
     dfa_from_nfa(&dfa, &nfa);
+
     printf("\nDFA:\n");
     dfa_print(&dfa);
+    export_dfa_to_dot(&dfa, "dfa.dot");
 
     minimize_dfa(&dfa, &minimized);
 
     printf("\nDFA minimal D':\n");
     dfa_print(&minimized);
-
-    export_dfa_to_dot(&dfa, "dfa.dot");
     export_dfa_to_dot(&minimized, "min_dfa.dot");
 
     generate_lexer_c(&minimized, "generated_lexer.c");
@@ -76,7 +77,13 @@ int main(int argc, char **argv) {
     ast_free(tree);
     free(regex);
 
-    
+
+    generate_lexer_c(&minimized, "generated_lexer.c");
+    printf("\nCompiling generated lexer...\n");
+    int result = system(
+        "gcc -Wall -Wextra -std=c11 generated_lexer.c -o lexer_generated"
+    );
+    printf("Compilation return code = %d\n", result);
 
     return 0;
 }

@@ -3,6 +3,17 @@
 
 #include "nfa.h"
 #include "dfa.h"
+#include "ast.h"
+
+
+/*
+Génère un fichier .dot 
+pour visualiser le AST
+*/
+void export_ast_to_dot(
+    ASTNode *tree, 
+    const char *filename
+);
 
 /*
 Génère un fichier .dot
@@ -21,5 +32,8 @@ void export_dfa_to_dot(
     const DFA *dfa,
     const char *filename
 );
+
+
+
 
 #endif
