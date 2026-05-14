@@ -8,6 +8,7 @@
 #include "dfa.h"
 #include "minimize.h"
 #include "graphviz.h"
+#include "generator.h"
 
 int main(int argc, char **argv) {
 
@@ -67,8 +68,15 @@ int main(int argc, char **argv) {
     printf("\nDFA minimal D':\n");
     dfa_print(&minimized);
 
+    export_dfa_to_dot(&dfa, "dfa.dot");
+    export_dfa_to_dot(&minimized, "min_dfa.dot");
+
+    generate_lexer_c(&minimized, "generated_lexer.c");
+
     ast_free(tree);
     free(regex);
+
+    
 
     return 0;
 }

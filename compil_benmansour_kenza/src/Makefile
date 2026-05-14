@@ -11,10 +11,18 @@ all: $(EXEC)
 $(EXEC): $(OBJ)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ)
 
+run:
+	./$(EXEC) test.txt
+
+graphs:
+	dot -Tpng nfa.dot -o nfa.png
+	dot -Tpng dfa.dot -o dfa.png
+	dot -Tpng min_dfa.dot -o min_dfa.png
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 
 clean:
 	rm -rf *.o $(EXEC) *.dSYM *.dot *.png generated_lexer.c lexer_generated
 
-.PHONY: all clean
+.PHONY: all clean run graphs

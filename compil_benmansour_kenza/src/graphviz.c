@@ -74,3 +74,54 @@ void export_nfa_to_dot(
 
     fclose(file);
 }
+
+/*
+Exporte le DFA
+dans un fichier Graphviz .dot
+*/
+void export_dfa_to_dot(
+    const DFA *dfa,
+    const char *filename
+) {
+    FILE *file;
+    int i;
+    int j;
+
+    file = fopen(filename, "w");
+
+    if (file == NULL) {
+        printf("Error: cannot create dot file\n");
+        return;
+    }
+
+    fprintf(file, "digraph DFA {\n");
+    fprintf(file, "    rankdir=LR;\n");
+
+    fprintf(file, "    node [shape = doublecircle];");
+    for (i = 0; i < dfa->state_count; i++) {
+        if (dfa->states[i].is_accepting) {
+            fprintf(file, " %d", i);
+        }
+    }
+    fprintf(file, ";\n");
+
+    fprintf(file, "    node [shape = circle];\n");
+
+    for (i = 0; i < dfa->state_count; i++) {
+        for (j = 0; j < dfa->alphabet_size; j++) {
+            if (dfa->transitions[i][j] != -1) {
+                fprintf(
+                    file,
+                    "    %d -> %d [label=\"%c\"];\n",
+                    i,
+                    dfa->transitions[i][j],
+                    dfa->alphabet[j]
+                );
+            }
+        }
+    }
+
+    fprintf(file, "}\n");
+
+    fclose(file);
+}
