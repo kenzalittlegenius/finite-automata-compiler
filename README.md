@@ -2,9 +2,12 @@
 C implementation of a simplified lexical analyzer generator: regular expressions .-> AST -> NFA -> DFA -> minimal DFA
 
 
+## Commandes
+
 make clean
 make
-make run
+./projet test.txt
+ls *.dot
 make graphs
 
 compiler : make 
